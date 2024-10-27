@@ -31,12 +31,10 @@ endif()
 
 target_link_libraries(RedBerry PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
-# Inclure les dossiers nécessaires
 target_include_directories(RedBerry PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/ui
 )
 
-# Si vous avez des fichiers .ui dans un dossier séparé, ajoutez ceci :
 set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_SOURCE_DIR}/ui)
