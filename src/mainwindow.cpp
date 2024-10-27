@@ -1,4 +1,4 @@
-#include "./mainwindow.h"
+#include "mainwindow.h"
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -46,4 +46,3 @@ void MainWindow::onNavigateButtonClicked()
 MainWindow::~MainWindow()
 {
 }
-
