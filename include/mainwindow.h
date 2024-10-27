@@ -2,32 +2,30 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QPushButton>
-#include <QLabel>
-#include <QStackedWidget>
+#include <QMap>
 
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
-QT_END_NAMESPACE
+class QPushButton;
+class QStackedWidget;
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    virtual ~MainWindow();
+    MainWindow(QWidget *parent = nullptr);
+
+private:
+    QPushButton* createMenuButton(const QString &text, const QString &pageName);
+    void createHomePage();
+    void createPages();
+    void navigateToPage(const QString &pageName);
 
 private slots:
-    void onNavigateButtonClicked();
-    // void onButtonClicked();
+    void onMenuButtonClicked();
 
 private:
     QStackedWidget *m_stackedWidget;
-    QLabel *m_label;
-    QPushButton *m_button;
-    QPushButton *m_navigateButton;
+    QMap<QString, QWidget*> m_pages;
 };
+
 #endif // MAINWINDOW_H

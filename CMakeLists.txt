@@ -13,12 +13,19 @@ find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
 set(PROJECT_SOURCES
-        src/main.cpp
-        src/mainwindow.cpp
-        include/mainwindow.h
-        ui/mainwindow.ui
-        resources.qrc
+    src/main.cpp
+    src/mainwindow.cpp
+    src/settings.cpp
+    src/attack.cpp
+    src/script.cpp
+    src/profile.cpp
+    include/mainwindow.h
+    include/settings.h
+    include/attack.h
+    include/script.h
+    include/profile.h
 )
+
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(RedBerry

@@ -25,7 +25,7 @@ if ! make; then
     error "Échec de la compilation"
 fi
 
-EXECUTABLE="./$PROJECT_NAME.app/Contents/MacOS/$PROJECT_NAME"
+EXECUTABLE="./$PROJECT_NAME"
 
 if [ ! -f "$EXECUTABLE" ]; then
     error "L'exécutable $EXECUTABLE n'existe pas"

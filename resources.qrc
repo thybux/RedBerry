@@ -1,6 +1,6 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource>
-        <file>resources/style.qss</file>
+        <file>resources/stylesheet/homePage.qss</file>
     </qresource>
 </RCC>
