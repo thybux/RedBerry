@@ -1,12 +1,66 @@
-CMakeLists.txt.user
+# Fichiers et dossiers générés par CMake
 CMakeCache.txt
-CMakeFiles
-CMakeScripts
-Testing
-Makefile
+CMakeFiles/
 cmake_install.cmake
-install_manifest.txt
-compile_commands.json
-CTestTestfile.cmake
-_deps
-CMakeUserPresets.json
+Makefile
+
+# Fichiers générés par Qt
+moc_*.cpp
+ui_*.h
+qrc_*.cpp
+*.qm
+
+# Fichiers de build
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Dossiers de build
+build/
+debug/
+release/
+
+# Fichiers spécifiques à Qt Creator
+*.user
+*.autosave
+
+# Fichiers spécifiques à macOS
+.DS_Store
+*.app
+
+# Fichiers générés par Qt MOC
+*_autogen/
+
+# Fichiers de projet Visual Studio (si vous utilisez VS)
+*.sln
+*.vcxproj
+*.vcxproj.filters
+
+# Fichiers de sauvegarde
+*~
+*.bak
+
+# Fichiers de log
+*.log
+
+# Fichiers temporaires
+*.tmp
+
+# Fichiers de configuration spécifiques à l'environnement
+.vscode/
+.idea/
+
+# Fichiers de dépendances (si vous utilisez un gestionnaire de paquets)
+/vcpkg_installed/
+
+# Fichiers de traduction compilés
+*.qm
+
+# Exécutable du projet (ajustez le nom si nécessaire)
+RedBerry
+
+# Script de build personnalisé (vous voudrez peut-être le garder dans le repo)
+# build-Exec.sh
