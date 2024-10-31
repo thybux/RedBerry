@@ -16,14 +16,12 @@ set(PROJECT_SOURCES
     src/main.cpp
     src/mainwindow.cpp
     src/settings.cpp
-    src/attack.cpp
-    src/script.cpp
-    src/profile.cpp
+    src/pentest.cpp
+    src/historique.cpp
     include/mainwindow.h
     include/settings.h
-    include/attack.h
-    include/script.h
-    include/profile.h
+    include/pentest.h
+    include/historique.h
 )
 
 

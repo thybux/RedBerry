@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "settings.h"
-#include "attack.h"
-#include "script.h"
+#include "pentest.h"
+#include "historique.h"
 #include "profile.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -40,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     setWindowTitle("RedBerry - Accueil");
-    resize(300, 500);
+    resize(500, 800);
 }
 
 void MainWindow::createHomePage()
@@ -59,7 +59,7 @@ void MainWindow::createHomePage()
     QWidget *buttonWidget = new QWidget;
     QVBoxLayout *buttonLayout = new QVBoxLayout(buttonWidget);
 
-    QStringList buttonNames = {"Settings", "Attack", "Script", "Profile"};
+    QStringList buttonNames = {"Settings", "Pentest", "Historique"};
     for (const QString &name : buttonNames)
     {
         QPushButton *button = createMenuButton(name, name);
@@ -87,20 +87,15 @@ void MainWindow::createPages()
     m_stackedWidget->addWidget(settingsPage);
     connect(settingsPage, &Settings::requestNavigateToPage, this, &MainWindow::navigateToPage);
 
-    Attack *attackPage = new Attack(this);
-    m_pages.insert("Attack", attackPage);
-    m_stackedWidget->addWidget(attackPage);
-    connect(attackPage, &Attack::requestNavigateToPage, this, &MainWindow::navigateToPage);
+    Pentest *pentestPage = new Pentest(this);
+    m_pages.insert("Pentest", pentestPage);
+    m_stackedWidget->addWidget(pentestPage);
+    connect(pentestPage, &Pentest::requestNavigateToPage, this, &MainWindow::navigateToPage);
 
-    Script *scriptPage = new Script(this);
-    m_pages.insert("Script", scriptPage);
-    m_stackedWidget->addWidget(scriptPage);
-    connect(scriptPage, &Script::requestNavigateToPage, this, &MainWindow::navigateToPage);
-
-    Profile *profilePage = new Profile(this);
-    m_pages.insert("Profile", profilePage);
-    m_stackedWidget->addWidget(profilePage);
-    connect(profilePage, &Profile::requestNavigateToPage, this, &MainWindow::navigateToPage);
+    Historique *historiquePage = new Historique(this);
+    m_pages.insert("Historique", historiquePage);
+    m_stackedWidget->addWidget(historiquePage);
+    connect(historiquePage, &Historique::requestNavigateToPage, this, &MainWindow::navigateToPage);
 }
 
 QPushButton* MainWindow::createMenuButton(const QString &text, const QString &pageName)

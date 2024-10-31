@@ -1,12 +1,12 @@
-#include "script.h"
+#include "historique.h"
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QPushButton>
 
-Script::Script(QWidget *parent) : QWidget(parent)
+Historique::Historique(QWidget *parent) : QWidget(parent)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
-    QLabel *label = new QLabel("Contenu de la page Script", this);
+    QLabel *label = new QLabel("Contenu de la page Historique", this);
     layout->addWidget(label);
 
     QPushButton *backButton = new QPushButton("Retour à l'accueil", this);
