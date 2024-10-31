@@ -2,5 +2,9 @@
 <RCC version="1.0">
     <qresource>
         <file>resources/stylesheet/homePage.qss</file>
+        <file>resources/img/background_image.png</file>
+        <file>resources/img/assets/settings.png</file>
+        <file>resources/img/assets/pentest.png</file>
+        <file>resources/img/assets/history.png</file>
     </qresource>
 </RCC>

@@ -22,6 +22,7 @@ set(PROJECT_SOURCES
     include/settings.h
     include/pentest.h
     include/historique.h
+    resources.qrc
 )
 
 

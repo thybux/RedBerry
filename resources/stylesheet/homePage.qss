@@ -1,33 +1,29 @@
+QMainWindow {
+    background-image: url(:/resources/img/background_image.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    border-image: url(:/resources/img/background_image.png) 0 0 0 0 stretch stretch;
+
+}
+
 QPushButton {
-    background-color: #2980b9;
-    color: black;
-    border: none;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 16px;
-    margin: 10px 0;
-    border-radius: 25px;
+    background-color: #3498db;
+    color: none;
+    border: 2px solid #2980b9;
+    border-radius: 10px;
+    padding: 5px;
 }
 
 QPushButton:hover {
     background-color: #2980b9;
-    color: white;
 }
 
 QPushButton:pressed {
     background-color: #2573a7;
-    padding-top: 17px;
-    padding-bottom: 13px;
 }
 
 QLabel {
-    color: #2c3e50;
-    font-size: 28px;
+    color: white;
+    font-size: 24px;
     font-weight: bold;
-    margin-bottom: 20px;
-}
-
-QWidget {
-    background-color: #ecf0f1;
 }

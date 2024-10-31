@@ -6,7 +6,9 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QPainter>
 #include <QLabel>
+#include <QPixmap>
 #include <QStackedWidget>
 #include <QFile>
 #include <QTextStream>
@@ -15,6 +17,8 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    // m_background = QPixmap(":/resources/img/background_image.png");
+
     QWidget *centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
 
@@ -26,38 +30,51 @@ MainWindow::MainWindow(QWidget *parent)
     createHomePage();
     createPages();
 
-    // Chargement et application du style
     QFile styleFile(":/resources/stylesheet/homePage.qss");
-    if (styleFile.open(QFile::ReadOnly | QFile::Text))
-    {
-        QTextStream styleStream(&styleFile);
-        this->setStyleSheet(styleStream.readAll());
-        styleFile.close();
+    qDebug() << "Tentative de chargement du style depuis:" << styleFile.fileName();
+    
+    if (!styleFile.exists()) {
+        qWarning() << "Le fichier de style n'existe pas!";
+        return;
     }
-    else
-    {
-        qWarning() << "Impossible de charger le fichier de style dans MainWindow";
+    
+    if (styleFile.open(QFile::ReadOnly | QFile::Text)) {
+        QTextStream styleStream(&styleFile);
+        QString styleSheet = styleStream.readAll();
+        this->setStyleSheet(styleSheet);
+        styleFile.close();
+    } else {
+        qWarning() << "Erreur lors de l'ouverture du fichier:" << styleFile.errorString();
     }
 
     setWindowTitle("RedBerry - Accueil");
     resize(500, 800);
 }
 
+void MainWindow::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+    painter.drawPixmap(rect(), m_background, m_background.rect());
+}
+
+
+/**
+ * @brief Crée la page d'accueil
+ */
 void MainWindow::createHomePage()
 {
     QWidget *homePage = new QWidget;
     QVBoxLayout *homeLayout = new QVBoxLayout(homePage);
 
-    // Ajouter un espace extensible en haut
     homeLayout->addStretch();
 
     QLabel *titleLabel = new QLabel("RedBerry", this);
+    titleLabel->setStyleSheet("color: white; font-size: 36px; font-weight: bold; margin-bottom: 20px;");
     titleLabel->setAlignment(Qt::AlignCenter);
     homeLayout->addWidget(titleLabel);
 
-    // Créer un widget pour contenir les boutons
     QWidget *buttonWidget = new QWidget;
-    QVBoxLayout *buttonLayout = new QVBoxLayout(buttonWidget);
+    QHBoxLayout *buttonLayout = new QHBoxLayout(buttonWidget);
 
     QStringList buttonNames = {"Settings", "Pentest", "Historique"};
     for (const QString &name : buttonNames)
@@ -66,20 +83,21 @@ void MainWindow::createHomePage()
         buttonLayout->addWidget(button);
     }
 
-    // Supprimer les marges du layout des boutons
     buttonLayout->setContentsMargins(0, 0, 0, 0);
-    buttonLayout->setSpacing(10); // Espace entre les boutons
+    buttonLayout->setSpacing(10);
 
-    // Ajouter le widget des boutons au layout principal
     homeLayout->addWidget(buttonWidget, 0, Qt::AlignCenter);
 
-    // Ajouter un espace extensible en bas
     homeLayout->addStretch();
 
     m_pages.insert("Home", homePage);
     m_stackedWidget->addWidget(homePage);
 }
 
+/**
+ * @brief Crée les pages
+ * page pour les paramètres, le pentest et l'historique
+ */
 void MainWindow::createPages()
 {
     Settings *settingsPage = new Settings(this);
@@ -98,27 +116,68 @@ void MainWindow::createPages()
     connect(historiquePage, &Historique::requestNavigateToPage, this, &MainWindow::navigateToPage);
 }
 
+/**
+ * @brief Crée les boutons de la page d'accueil
+ */
 QPushButton* MainWindow::createMenuButton(const QString &text, const QString &pageName)
 {
-    QPushButton *button = new QPushButton(text, this);
-    button->setFixedSize(220, 60); // Taille fixe pour tous les boutons
+    // Créer un widget conteneur
+    QWidget *container = new QWidget;
+    QVBoxLayout *layout = new QVBoxLayout(container);
+    layout->setAlignment(Qt::AlignCenter);
+    layout->setSpacing(5);
+    
+    // Créer le label pour l'icône
+    QLabel *iconLabel = new QLabel;
+    QString iconPath;
+    if (pageName == "Settings") {
+        iconPath = ":/resources/img/assets/settings.png";
+    } else if (pageName == "Pentest") {
+        iconPath = ":/resources/img/assets/pentest.png";
+    } else if (pageName == "Historique") {
+        iconPath = ":/resources/img/assets/history.png";
+    }
+    
+    iconLabel->setPixmap(QPixmap(iconPath).scaled(32, 32, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    layout->addWidget(iconLabel, 0, Qt::AlignCenter);
+    
+    QLabel *textLabel = new QLabel(text);
+    textLabel->setStyleSheet("font-size: 20px; font-weight: bold; margin-top: 10px;");
+    layout->addWidget(textLabel, 0, Qt::AlignCenter);
+    
+    QPushButton *button = new QPushButton(this);
+    button->setFixedSize(220, 120);
     button->setCursor(Qt::PointingHandCursor);
+
+    
+    QVBoxLayout *buttonLayout = new QVBoxLayout(button);
+    buttonLayout->setContentsMargins(5, 5, 5, 5);
+    buttonLayout->addWidget(container);
+    
     button->setStyleSheet(
         "QPushButton { "
-        "   background-color: #3498db; "
-        "   color: white; "
-        "   border: 2px solid #2980b9; "
-        "   border-radius: 10px; "
+        "   background-color: transparent; "
+        "   border: none; "
         "   padding: 5px; "
         "}"
-        "QPushButton:hover { background-color: #2980b9; }"
-        "QPushButton:pressed { background-color: #2573a7; }"
+        "QPushButton:hover { "
+        "   background-color: rgba(255, 255, 255, 30); "  // Effet hover subtil
+        "}"
+        "QPushButton:pressed { "
+        "   background-color: rgba(255, 255, 255, 50); "  // Effet pressed subtil
+        "}"
     );
     
-    connect(button, &QPushButton::clicked, this, [this, pageName]() { navigateToPage(pageName); });
+    connect(button, &QPushButton::clicked, this, [this, pageName]() { 
+        navigateToPage(pageName); 
+    });
+    
     return button;
 }
 
+/**
+ * @brief Gère le clic sur un bouton de la page d'accueil
+ */
 void MainWindow::onMenuButtonClicked()
 {
     QPushButton *button = qobject_cast<QPushButton*>(sender());
@@ -129,6 +188,9 @@ void MainWindow::onMenuButtonClicked()
     }
 }
 
+/**
+ * @brief Navige à la page spécifiée
+ */
 void MainWindow::navigateToPage(const QString &pageName)
 {
     if (m_pages.contains(pageName))
