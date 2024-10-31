@@ -121,13 +121,11 @@ void MainWindow::createPages()
  */
 QPushButton* MainWindow::createMenuButton(const QString &text, const QString &pageName)
 {
-    // Créer un widget conteneur
     QWidget *container = new QWidget;
     QVBoxLayout *layout = new QVBoxLayout(container);
     layout->setAlignment(Qt::AlignCenter);
     layout->setSpacing(5);
     
-    // Créer le label pour l'icône
     QLabel *iconLabel = new QLabel;
     QString iconPath;
     if (pageName == "Settings") {
@@ -161,10 +159,10 @@ QPushButton* MainWindow::createMenuButton(const QString &text, const QString &pa
         "   padding: 5px; "
         "}"
         "QPushButton:hover { "
-        "   background-color: rgba(255, 255, 255, 30); "  // Effet hover subtil
+        "   background-color: rgba(255, 255, 255, 30); " 
         "}"
         "QPushButton:pressed { "
-        "   background-color: rgba(255, 255, 255, 50); "  // Effet pressed subtil
+        "   background-color: rgba(255, 255, 255, 50); "
         "}"
     );
     

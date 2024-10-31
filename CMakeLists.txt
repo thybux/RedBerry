@@ -1,47 +1,48 @@
 cmake_minimum_required(VERSION 3.5)
+project(RedBerry)
 
-project(RedBerry LANGUAGES CXX)
-
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
 
-set(PROJECT_SOURCES
+find_package(Qt6 COMPONENTS Widgets Network REQUIRED)
+
+set(SOURCES
     src/main.cpp
     src/mainwindow.cpp
-    src/settings.cpp
     src/pentest.cpp
+    src/nmap_scanner.cpp
+    src/settings.cpp
     src/historique.cpp
-    include/mainwindow.h
-    include/settings.h
-    include/pentest.h
-    include/historique.h
     resources.qrc
 )
 
-
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(RedBerry
-        ${PROJECT_SOURCES}
-    )
-else()
-    add_executable(RedBerry
-        ${PROJECT_SOURCES}
-    )
-endif()
-
-target_link_libraries(RedBerry PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-
-target_include_directories(RedBerry PRIVATE 
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/ui
+set(HEADERS
+    include/mainwindow.h
+    include/pentest.h
+    include/nmap_scanner.h
+    include/settings.h
+    include/historique.h
 )
 
-set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_SOURCE_DIR}/ui)
+set(RESOURCES
+    resources.qrc
+)
+
+add_executable(RedBerry
+    ${SOURCES}
+    ${HEADERS}
+    ${RESOURCES}
+)
+
+target_link_libraries(RedBerry PRIVATE
+    Qt6::Widgets
+    Qt6::Network
+)
+
+target_include_directories(RedBerry PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)

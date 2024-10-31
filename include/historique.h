@@ -6,6 +6,7 @@
 class Historique : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit Historique(QWidget *parent = nullptr);
 

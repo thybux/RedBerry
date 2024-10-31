@@ -31,6 +31,7 @@ private:
     QCheckBox *m_osDetectionCheck;
     QCheckBox *m_scriptScanCheck;
     QTextEdit *m_outputDisplay;
+    QCheckBox *m_servicePortCheck;
     
     // Process handling
     QProcess *m_nmapProcess;

@@ -1,27 +1,55 @@
 #include "nmap_scanner.h"
 #include <QVBoxLayout>
+#include <QGroupBox>
+#include <QLabel>
 #include <QHBoxLayout>
+#include <QPushButton>
+#include <QMessageBox>
+#include <QProcess>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QLineEdit>
+#include <QTextEdit>
+#include <QDebug>
 #include <QGroupBox>
 #include <QLabel>
 #include <QPushButton>
 #include <QMessageBox>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QTextEdit>
 
 NmapScanner::NmapScanner(QWidget *parent)
     : QWidget(parent)
     , m_nmapProcess(new QProcess(this))
 {
+
+    m_targetInput = new QLineEdit(this);
+    m_scanTypeCombo = new QComboBox(this);
+    m_portScanCheck = new QCheckBox(tr("Scanner les ports"), this);
+    m_portRangeInput = new QLineEdit("1-1000", this);
+    m_serviceDetectionCheck = new QCheckBox(tr("Détection de services (-sV)"), this);
+    m_osDetectionCheck = new QCheckBox(tr("Détection d'OS (-O)"), this);
+    m_scriptScanCheck = new QCheckBox(tr("Scan de scripts (-sC)"), this);
+
     auto mainLayout = new QVBoxLayout(this);
 
     // Configuration Group
     auto configGroup = new QGroupBox(tr("Configuration du scan"));
-    auto configLayout = new QFormLayout;
+    auto configLayout = new QVBoxLayout;
 
-    // Target input
-    m_targetInput = new QLineEdit(this);
-    configLayout->addRow(tr("Cible (IP/Hostname):"), m_targetInput);
+    // Target input section
+    QWidget *targetContainer = new QWidget;
+    QVBoxLayout *targetLayout = new QVBoxLayout(targetContainer);
+    targetLayout->addWidget(new QLabel(tr("Cible (IP/Hostname):")));
+    targetLayout->addWidget(m_targetInput);
+    configLayout->addWidget(targetContainer);
 
-    // Scan type
-    m_scanTypeCombo = new QComboBox(this);
+    // Scan type section
+    QWidget *scanTypeContainer = new QWidget;
+    QHBoxLayout *scanTypeLayout = new QHBoxLayout(scanTypeContainer);
+    scanTypeLayout->addWidget(new QLabel(tr("Type de scan:")));
     m_scanTypeCombo->addItems({
         tr("Scan rapide (-T4 -F)"),
         tr("Scan complet"),
@@ -29,28 +57,32 @@ NmapScanner::NmapScanner(QWidget *parent)
         tr("Scan UDP (-sU)"),
         tr("Scan complet avec tous les scripts (-sC)")
     });
-    configLayout->addRow(tr("Type de scan:"), m_scanTypeCombo);
+    scanTypeLayout->addWidget(m_scanTypeCombo);
+    configLayout->addWidget(scanTypeContainer);
 
-    // Port configuration
-    m_portScanCheck = new QCheckBox(tr("Scanner les ports"), this);
-    m_portRangeInput = new QLineEdit("1-1000", this);
-    auto portLayout = new QHBoxLayout;
+    // Port configuration section
+    QWidget *portContainer = new QWidget;
+    QHBoxLayout *portLayout = new QHBoxLayout(portContainer);
+
+    QHBoxLayout *portLayout2 = new QHBoxLayout;
+    portLayout2->addWidget(new QLabel(tr("Plage de ports:")));
+    portLayout2->addWidget(m_portRangeInput);
+
+
     portLayout->addWidget(m_portScanCheck);
-    portLayout->addWidget(new QLabel(tr("Plage de ports:")));
-    portLayout->addWidget(m_portRangeInput);
-    configLayout->addRow(portLayout);
-
-    // Additional options
-    m_serviceDetectionCheck = new QCheckBox(tr("Détection de services (-sV)"), this);
-    m_osDetectionCheck = new QCheckBox(tr("Détection d'OS (-O)"), this);
-    m_scriptScanCheck = new QCheckBox(tr("Scan de scripts (-sC)"), this);
-    
-    configLayout->addRow(m_serviceDetectionCheck);
-    configLayout->addRow(m_osDetectionCheck);
-    configLayout->addRow(m_scriptScanCheck);
+    configLayout->addWidget(portContainer);
 
     configGroup->setLayout(configLayout);
     mainLayout->addWidget(configGroup);
+
+    // Additional options dans un nouveau groupe
+    auto optionsGroup = new QGroupBox(tr("Options additionnelles"));
+    auto optionsLayout = new QHBoxLayout;
+    optionsLayout->addWidget(m_serviceDetectionCheck);
+    optionsLayout->addWidget(m_osDetectionCheck);
+    optionsLayout->addWidget(m_scriptScanCheck);
+    optionsGroup->setLayout(optionsLayout);
+    mainLayout->addWidget(optionsGroup);
 
     // Scan button
     auto scanButton = new QPushButton(tr("Lancer le scan"), this);
