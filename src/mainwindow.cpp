@@ -17,7 +17,6 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    // m_background = QPixmap(":/resources/img/background_image.png");
 
     QWidget *centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);

@@ -19,6 +19,7 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QTextEdit>
+#include "libs/include/logger.h"
 
 NmapScanner::NmapScanner(QWidget *parent)
     : QWidget(parent)
@@ -66,10 +67,10 @@ NmapScanner::NmapScanner(QWidget *parent)
 
     QHBoxLayout *portLayout2 = new QHBoxLayout;
     portLayout2->addWidget(new QLabel(tr("Plage de ports:")));
-    portLayout2->addWidget(m_portRangeInput);
 
 
     portLayout->addWidget(m_portScanCheck);
+    portLayout->addWidget(m_portRangeInput);
     configLayout->addWidget(portContainer);
 
     configGroup->setLayout(configLayout);
@@ -129,16 +130,26 @@ QString NmapScanner::buildNmapCommand()
 
 void NmapScanner::runScan()
 {
-    if (m_targetInput->text().isEmpty()) {
+    const QString target = m_targetInput->text();
+    if (target.isEmpty()) {
         QMessageBox::warning(this, tr("Erreur"), tr("Veuillez spécifier une cible"));
         return;
     }
 
+    // Préparer la commande
+    QString command = buildNmapCommand();
+    QStringList args = command.split(' ', Qt::SkipEmptyParts);
+    args.removeFirst(); // Enlever "nmap" du début
+
+    // Nettoyer et préparer l'affichage
     m_outputDisplay->clear();
     m_outputDisplay->append(tr("Démarrage du scan...\n"));
-    m_outputDisplay->append(tr("Commande: ") + buildNmapCommand() + "\n");
+    m_outputDisplay->append(tr("Commande: ") + command + "\n");
 
-    m_nmapProcess->start("nmap", QStringList() << "-v" << m_targetInput->text());
+    // Démarrer le scan
+    m_nmapProcess->start("nmap", args);
+
+    // Le logging sera fait dans scanFinished pour avoir le résultat complet
 }
 
 void NmapScanner::handleScanOutput()
@@ -155,9 +166,17 @@ void NmapScanner::handleScanError()
 
 void NmapScanner::scanFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    if (exitStatus == QProcess::NormalExit && exitCode == 0) {
-        m_outputDisplay->append(tr("\nScan terminé avec succès"));
-    } else {
-        m_outputDisplay->append(tr("\nLe scan a échoué avec le code: ") + QString::number(exitCode));
-    }
+    bool success = (exitStatus == QProcess::NormalExit && exitCode == 0);
+    
+    // Logger le scan avec son résultat
+    Logger::getInstance().logNmapScan(
+        m_targetInput->text(),
+        m_scanTypeCombo->currentText(),
+        buildNmapCommand(),
+        m_outputDisplay->toPlainText(),
+        success
+    );
+
+    // Afficher le statut final
+    m_outputDisplay->append(tr("\nScan %1").arg(success ? "terminé avec succès" : "échoué"));
 }

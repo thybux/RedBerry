@@ -18,6 +18,7 @@ set(SOURCES
     src/settings.cpp
     src/historique.cpp
     resources.qrc
+    src/libs/logger.cpp
 )
 
 set(HEADERS
@@ -26,6 +27,7 @@ set(HEADERS
     include/nmap_scanner.h
     include/settings.h
     include/historique.h
+    src/libs/include/logger.h
 )
 
 set(RESOURCES
