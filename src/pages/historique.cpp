@@ -1,4 +1,4 @@
-#include "historique.h"
+#include "./include/historique.h"
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QLabel>

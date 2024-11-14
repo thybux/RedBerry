@@ -1,4 +1,4 @@
-#include "nmap_scanner.h"
+#include "./include/nmap_scanner.h"
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QLabel>
@@ -19,7 +19,7 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QTextEdit>
-#include "libs/include/logger.h"
+#include "./include/logger.h"
 
 NmapScanner::NmapScanner(QWidget *parent)
     : QWidget(parent)

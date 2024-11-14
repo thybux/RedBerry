@@ -13,20 +13,20 @@ find_package(Qt6 COMPONENTS Widgets Network REQUIRED)
 set(SOURCES
     src/main.cpp
     src/mainwindow.cpp
-    src/pentest.cpp
-    src/nmap_scanner.cpp
-    src/settings.cpp
-    src/historique.cpp
+    src/pages/pentest.cpp
+    src/libs/nmap_scanner.cpp
+    src/pages/settings.cpp
+    src/pages/historique.cpp
     resources.qrc
     src/libs/logger.cpp
 )
 
 set(HEADERS
-    include/mainwindow.h
-    include/pentest.h
-    include/nmap_scanner.h
-    include/settings.h
-    include/historique.h
+    src/mainwindow.h
+    src/pages/include/pentest.h
+    src/libs/include/nmap_scanner.h
+    src/pages/include/settings.h
+    src/pages/include/historique.h
     src/libs/include/logger.h
 )
 

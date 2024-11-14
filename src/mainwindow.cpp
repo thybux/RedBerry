@@ -1,8 +1,7 @@
-#include "mainwindow.h"
-#include "settings.h"
-#include "pentest.h"
-#include "historique.h"
-#include "profile.h"
+#include "./mainwindow.h"
+#include "./pages/include/settings.h"
+#include "./pages/include/pentest.h"
+#include "./pages/include/historique.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>

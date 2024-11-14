@@ -3,7 +3,6 @@ QMainWindow {
     background-position: center;
     background-repeat: no-repeat;
     border-image: url(:/resources/img/background_image.png) 0 0 0 0 stretch stretch;
-
 }
 
 QPushButton {
