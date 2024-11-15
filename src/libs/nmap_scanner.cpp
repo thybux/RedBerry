@@ -3,7 +3,6 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QLabel>
-#include <QHBoxLayout>
 #include <QPushButton>
 #include <QMessageBox>
 #include <QProcess>
@@ -12,80 +11,18 @@
 #include <QLineEdit>
 #include <QTextEdit>
 #include <QDebug>
-#include <QGroupBox>
-#include <QLabel>
-#include <QPushButton>
-#include <QMessageBox>
-#include <QLineEdit>
-#include <QComboBox>
-#include <QCheckBox>
-#include <QTextEdit>
 
 NmapScanner::NmapScanner(QWidget *parent)
-    : QWidget(parent)
-    , m_nmapProcess(new QProcess(this))
+    : QWidget(parent), m_nmapProcess(new QProcess(this))
 {
-
-    m_targetInput = new QLineEdit(this);
-    m_scanTypeCombo = new QComboBox(this);
-    m_portScanCheck = new QCheckBox(tr("Scanner les ports"), this);
-    m_portRangeInput = new QLineEdit("1-1000", this);
-    m_serviceDetectionCheck = new QCheckBox(tr("Détection de services (-sV)"), this);
-    m_osDetectionCheck = new QCheckBox(tr("Détection d'OS (-O)"), this);
-    m_scriptScanCheck = new QCheckBox(tr("Scan de scripts (-sC)"), this);
-
     auto mainLayout = new QVBoxLayout(this);
 
-    auto configGroup = new QGroupBox(tr("Configuration du scan"));
-    auto configLayout = new QVBoxLayout;
+    setupConfigGroup(mainLayout);
+    setupOptionsGroup(mainLayout);
+    setupOutputDisplay(mainLayout);
 
-    QWidget *targetContainer = new QWidget;
-    QVBoxLayout *targetLayout = new QVBoxLayout(targetContainer);
-    targetLayout->addWidget(new QLabel(tr("Cible (IP/Hostname):")));
-    targetLayout->addWidget(m_targetInput);
-    configLayout->addWidget(targetContainer);
-
-    QWidget *scanTypeContainer = new QWidget;
-    QHBoxLayout *scanTypeLayout = new QHBoxLayout(scanTypeContainer);
-    scanTypeLayout->addWidget(new QLabel(tr("Type de scan:")));
-    m_scanTypeCombo->addItems({
-        tr("Scan rapide (-T4 -F)"),
-        tr("Scan complet"),
-        tr("Scan furtif (-sS)"),
-        tr("Scan UDP (-sU)"),
-        tr("Scan complet avec tous les scripts (-sC)")
-    });
-    scanTypeLayout->addWidget(m_scanTypeCombo);
-    configLayout->addWidget(scanTypeContainer);
-
-    QWidget *portContainer = new QWidget;
-    QHBoxLayout *portLayout = new QHBoxLayout(portContainer);
-
-    QHBoxLayout *portLayout2 = new QHBoxLayout;
-    portLayout2->addWidget(new QLabel(tr("Plage de ports:")));
-
-
-    portLayout->addWidget(m_portScanCheck);
-    portLayout->addWidget(m_portRangeInput);
-    configLayout->addWidget(portContainer);
-
-    configGroup->setLayout(configLayout);
-    mainLayout->addWidget(configGroup);
-
-    auto optionsGroup = new QGroupBox(tr("Options additionnelles"));
-    auto optionsLayout = new QHBoxLayout;
-    optionsLayout->addWidget(m_serviceDetectionCheck);
-    optionsLayout->addWidget(m_osDetectionCheck);
-    optionsLayout->addWidget(m_scriptScanCheck);
-    optionsGroup->setLayout(optionsLayout);
-    mainLayout->addWidget(optionsGroup);
-
-    auto scanButton = new QPushButton(tr("Lancer le scan"), this);
+    scanButton = new QPushButton(tr("Lancer le scan"), this);
     mainLayout->addWidget(scanButton);
-
-    m_outputDisplay = new QTextEdit(this);
-    m_outputDisplay->setReadOnly(true);
-    m_outputDisplay->hide();
 
     connect(scanButton, &QPushButton::clicked, this, &NmapScanner::runScan);
     connect(m_nmapProcess, &QProcess::readyReadStandardOutput, this, &NmapScanner::handleScanOutput);
@@ -94,25 +31,93 @@ NmapScanner::NmapScanner(QWidget *parent)
             this, &NmapScanner::scanFinished);
 }
 
+void NmapScanner::setupConfigGroup(QVBoxLayout *mainLayout)
+{
+    auto configGroup = new QGroupBox(tr("Configuration du scan"));
+    configGroup->setStyleSheet("color: white;");
+    auto configLayout = new QVBoxLayout;
+
+    auto targetLayout = new QVBoxLayout;
+    targetLayout->addWidget(new QLabel(tr("Cible (IP/Hostname):")));
+    m_targetInput = new QLineEdit(this);
+    m_targetInput->setStyleSheet("color: white; background-color: #222; border: 2px solid #222; border-radius: 12px;");
+    targetLayout->addWidget(m_targetInput);
+    configLayout->addLayout(targetLayout);
+
+    auto scanTypeLayout = new QVBoxLayout;
+    scanTypeLayout->addWidget(new QLabel(tr("Type de scan:")));
+    m_scanTypeCombo = new QComboBox(this);
+    m_scanTypeCombo->addItems({
+        tr("Scan rapide (-T4 -F)"),
+        tr("Scan complet"),
+        tr("Scan furtif (-sS)"),
+        tr("Scan UDP (-sU)"),
+        tr("Scan complet avec tous les scripts (-sC)")
+    });
+    m_scanTypeCombo->setStyleSheet("color: black;");
+    scanTypeLayout->addWidget(m_scanTypeCombo);
+    configLayout->addLayout(scanTypeLayout);
+
+    auto portLayout = new QHBoxLayout;
+    m_portScanCheck = new QCheckBox(tr("Scanner les ports"), this);
+    m_portScanCheck->setStyleSheet("color: white;");
+    m_portRangeInput = new QLineEdit("1-1000", this);
+    portLayout->addWidget(m_portScanCheck);
+    portLayout->addWidget(new QLabel(tr("Plage de ports:")));
+    m_portRangeInput->setStyleSheet("color: white; background-color: #222; border: 2px solid #222; border-radius: 12px;");
+    portLayout->addWidget(m_portRangeInput);
+    configLayout->addLayout(portLayout);
+
+    configGroup->setLayout(configLayout);
+    mainLayout->addWidget(configGroup);
+}
+
+void NmapScanner::setupOptionsGroup(QVBoxLayout *mainLayout)
+{
+    auto optionsGroup = new QGroupBox(tr("Options additionnelles"));
+    optionsGroup->setStyleSheet("color: white;");
+    auto optionsLayout = new QHBoxLayout;
+    m_serviceDetectionCheck = new QCheckBox(tr("Détection de services (-sV)"), this);
+    m_serviceDetectionCheck->setStyleSheet("color: white;");
+    m_osDetectionCheck = new QCheckBox(tr("Détection d'OS (-O)"), this);
+    m_osDetectionCheck->setStyleSheet("color: white;");
+    m_scriptScanCheck = new QCheckBox(tr("Scan de scripts (-sC)"), this);
+    m_scriptScanCheck->setStyleSheet("color: white;");
+    optionsLayout->addWidget(m_serviceDetectionCheck);
+    optionsLayout->addWidget(m_osDetectionCheck);
+    optionsLayout->addWidget(m_scriptScanCheck);
+    optionsGroup->setLayout(optionsLayout);
+    mainLayout->addWidget(optionsGroup);
+}
+
+void NmapScanner::setupOutputDisplay(QVBoxLayout *mainLayout)
+{
+    m_outputDisplay = new QTextEdit(this);
+    m_outputDisplay->setReadOnly(true);
+    m_outputDisplay->hide();
+    mainLayout->addWidget(m_outputDisplay);
+}
+
 QString NmapScanner::buildNmapCommand()
 {
     QStringList args;
     args << m_targetInput->text();
 
-    // Scan type
-    switch (m_scanTypeCombo->currentIndex()) {
-        case 0: args << "-T4" << "-F"; break;
-        case 2: args << "-sS"; break;
-        case 3: args << "-sU"; break;
-        case 4: args << "-sC"; break;
+    QMap<int, QStringList> scanOptions = {
+        {0, {"-T4", "-F"}}, 
+        {1, {"-p-"}},     
+        {2, {"-sS"}},
+        {3, {"-sU"}},
+        {4, {"-sC"}}
+    };
+
+    if (scanOptions.contains(m_scanTypeCombo->currentIndex())) {
+        args << scanOptions[m_scanTypeCombo->currentIndex()];
     }
 
-    // Port range
     if (m_portScanCheck->isChecked()) {
         args << "-p" << m_portRangeInput->text();
     }
-
-    // Additional options
     if (m_serviceDetectionCheck->isChecked()) args << "-sV";
     if (m_osDetectionCheck->isChecked()) args << "-O";
     if (m_scriptScanCheck->isChecked()) args << "-sC";
@@ -136,8 +141,9 @@ void NmapScanner::runScan()
     m_outputDisplay->append(tr("Démarrage du scan...\n"));
     m_outputDisplay->append(tr("Commande: ") + command + "\n");
 
+    scanButton->setEnabled(false);
+    scanButton->setText(tr("Scan en cours..."));
     m_nmapProcess->start("nmap", args);
-
 }
 
 void NmapScanner::handleScanOutput()
@@ -154,10 +160,11 @@ void NmapScanner::handleScanError()
 
 void NmapScanner::scanFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
+    scanButton->setEnabled(true);
+    scanButton->setText(tr("Lancer le scan"));
     bool success = (exitStatus == QProcess::NormalExit && exitCode == 0);
     QString output = m_outputDisplay->toPlainText();
     
-    // Écrire la sortie dans un fichier .txt
     QFile file("src/libs/output_nmap_scann/output.txt");
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream out(&file);
@@ -167,6 +174,5 @@ void NmapScanner::scanFinished(int exitCode, QProcess::ExitStatus exitStatus)
         qWarning() << "Impossible d'ouvrir le fichier pour écrire les résultats du scan.";
     }
 
-    // emettre le signal pour changer de page
     emit scanCompleted(m_targetInput->text(), output, success);
 }

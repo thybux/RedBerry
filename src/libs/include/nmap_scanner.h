@@ -7,6 +7,8 @@
 #include <QCheckBox>
 #include <QProcess>
 #include <QComboBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 class NmapScanner : public QWidget
 {
@@ -20,12 +22,16 @@ private slots:
     void handleScanOutput();
     void handleScanError();
     void scanFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    
+    void setupOptionsGroup(QVBoxLayout* mainLayout);
+    void setupOutputDisplay(QVBoxLayout* mainLayout);
+    void setupConfigGroup(QVBoxLayout* mainLayout);
+
 signals:
     void scanCompleted(const QString& target, const QString& output, bool success);
 
 private:
     // Interface elements
+    QPushButton* scanButton;
     QLineEdit *m_targetInput;
     QComboBox *m_scanTypeCombo;
     QCheckBox *m_portScanCheck;
