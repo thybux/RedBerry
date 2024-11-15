@@ -17,8 +17,9 @@ set(SOURCES
     src/libs/nmap_scanner.cpp
     src/pages/settings.cpp
     src/pages/historique.cpp
+    src/pages/scan_result_page.cpp
+    src/libs/nmap_parser.cpp
     resources.qrc
-    src/libs/logger.cpp
 )
 
 set(HEADERS
@@ -27,7 +28,8 @@ set(HEADERS
     src/libs/include/nmap_scanner.h
     src/pages/include/settings.h
     src/pages/include/historique.h
-    src/libs/include/logger.h
+    src/pages/include/scan_result_page.h
+    src/libs/include/nmap_parser.h
 )
 
 set(RESOURCES

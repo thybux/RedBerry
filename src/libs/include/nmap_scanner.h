@@ -20,6 +20,9 @@ private slots:
     void handleScanOutput();
     void handleScanError();
     void scanFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    
+signals:
+    void scanCompleted(const QString& target, const QString& output, bool success);
 
 private:
     // Interface elements

@@ -1,4 +1,5 @@
 #include "./include/nmap_scanner.h"
+#include <QFile>
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QLabel>
@@ -19,7 +20,6 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QTextEdit>
-#include "./include/logger.h"
 
 NmapScanner::NmapScanner(QWidget *parent)
     : QWidget(parent)
@@ -36,18 +36,15 @@ NmapScanner::NmapScanner(QWidget *parent)
 
     auto mainLayout = new QVBoxLayout(this);
 
-    // Configuration Group
     auto configGroup = new QGroupBox(tr("Configuration du scan"));
     auto configLayout = new QVBoxLayout;
 
-    // Target input section
     QWidget *targetContainer = new QWidget;
     QVBoxLayout *targetLayout = new QVBoxLayout(targetContainer);
     targetLayout->addWidget(new QLabel(tr("Cible (IP/Hostname):")));
     targetLayout->addWidget(m_targetInput);
     configLayout->addWidget(targetContainer);
 
-    // Scan type section
     QWidget *scanTypeContainer = new QWidget;
     QHBoxLayout *scanTypeLayout = new QHBoxLayout(scanTypeContainer);
     scanTypeLayout->addWidget(new QLabel(tr("Type de scan:")));
@@ -61,7 +58,6 @@ NmapScanner::NmapScanner(QWidget *parent)
     scanTypeLayout->addWidget(m_scanTypeCombo);
     configLayout->addWidget(scanTypeContainer);
 
-    // Port configuration section
     QWidget *portContainer = new QWidget;
     QHBoxLayout *portLayout = new QHBoxLayout(portContainer);
 
@@ -76,7 +72,6 @@ NmapScanner::NmapScanner(QWidget *parent)
     configGroup->setLayout(configLayout);
     mainLayout->addWidget(configGroup);
 
-    // Additional options dans un nouveau groupe
     auto optionsGroup = new QGroupBox(tr("Options additionnelles"));
     auto optionsLayout = new QHBoxLayout;
     optionsLayout->addWidget(m_serviceDetectionCheck);
@@ -85,16 +80,13 @@ NmapScanner::NmapScanner(QWidget *parent)
     optionsGroup->setLayout(optionsLayout);
     mainLayout->addWidget(optionsGroup);
 
-    // Scan button
     auto scanButton = new QPushButton(tr("Lancer le scan"), this);
     mainLayout->addWidget(scanButton);
 
-    // Output display
     m_outputDisplay = new QTextEdit(this);
     m_outputDisplay->setReadOnly(true);
-    mainLayout->addWidget(m_outputDisplay);
+    m_outputDisplay->hide();
 
-    // Connect signals
     connect(scanButton, &QPushButton::clicked, this, &NmapScanner::runScan);
     connect(m_nmapProcess, &QProcess::readyReadStandardOutput, this, &NmapScanner::handleScanOutput);
     connect(m_nmapProcess, &QProcess::readyReadStandardError, this, &NmapScanner::handleScanError);
@@ -136,20 +128,16 @@ void NmapScanner::runScan()
         return;
     }
 
-    // Préparer la commande
     QString command = buildNmapCommand();
     QStringList args = command.split(' ', Qt::SkipEmptyParts);
-    args.removeFirst(); // Enlever "nmap" du début
+    args.removeFirst();
 
-    // Nettoyer et préparer l'affichage
     m_outputDisplay->clear();
     m_outputDisplay->append(tr("Démarrage du scan...\n"));
     m_outputDisplay->append(tr("Commande: ") + command + "\n");
 
-    // Démarrer le scan
     m_nmapProcess->start("nmap", args);
 
-    // Le logging sera fait dans scanFinished pour avoir le résultat complet
 }
 
 void NmapScanner::handleScanOutput()
@@ -167,16 +155,18 @@ void NmapScanner::handleScanError()
 void NmapScanner::scanFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     bool success = (exitStatus == QProcess::NormalExit && exitCode == 0);
+    QString output = m_outputDisplay->toPlainText();
     
-    // Logger le scan avec son résultat
-    Logger::getInstance().logNmapScan(
-        m_targetInput->text(),
-        m_scanTypeCombo->currentText(),
-        buildNmapCommand(),
-        m_outputDisplay->toPlainText(),
-        success
-    );
+    // Écrire la sortie dans un fichier .txt
+    QFile file("src/libs/output_nmap_scann/output.txt");
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        out << output;
+        file.close();
+    } else {
+        qWarning() << "Impossible d'ouvrir le fichier pour écrire les résultats du scan.";
+    }
 
-    // Afficher le statut final
-    m_outputDisplay->append(tr("\nScan %1").arg(success ? "terminé avec succès" : "échoué"));
+    // emettre le signal pour changer de page
+    emit scanCompleted(m_targetInput->text(), output, success);
 }

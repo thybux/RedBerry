@@ -19,6 +19,7 @@ private:
     void createHomePage();
     void createPages();
     void navigateToPage(const QString &pageName);
+    void showScanResults(const QString& target, const QString& output, bool success);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
