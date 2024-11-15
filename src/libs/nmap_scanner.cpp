@@ -42,6 +42,8 @@ void NmapScanner::setupConfigGroup(QVBoxLayout *mainLayout)
     m_targetInput = new QLineEdit(this);
     m_targetInput->setStyleSheet("color: white; background-color: #222; border: 2px solid #222; border-radius: 12px;");
     targetLayout->addWidget(m_targetInput);
+
+
     configLayout->addLayout(targetLayout);
 
     auto scanTypeLayout = new QVBoxLayout;
@@ -56,15 +58,17 @@ void NmapScanner::setupConfigGroup(QVBoxLayout *mainLayout)
     });
     m_scanTypeCombo->setStyleSheet("color: black;");
     scanTypeLayout->addWidget(m_scanTypeCombo);
+
     configLayout->addLayout(scanTypeLayout);
 
-    auto portLayout = new QHBoxLayout;
+    auto portLayout = new QVBoxLayout;
     m_portScanCheck = new QCheckBox(tr("Scanner les ports"), this);
     m_portScanCheck->setStyleSheet("color: white;");
     m_portRangeInput = new QLineEdit("1-1000", this);
     portLayout->addWidget(m_portScanCheck);
     portLayout->addWidget(new QLabel(tr("Plage de ports:")));
     m_portRangeInput->setStyleSheet("color: white; background-color: #222; border: 2px solid #222; border-radius: 12px;");
+    portLayout->setSpacing(10);
     portLayout->addWidget(m_portRangeInput);
     configLayout->addLayout(portLayout);
 
