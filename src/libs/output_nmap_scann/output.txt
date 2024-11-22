@@ -1,15 +1,119 @@
 Démarrage du scan...
 
-Commande: nmap localhost -T4 -F
+Commande: nmap localhost -sC -p 1-10000 -sV
 
-Starting Nmap 7.95 ( https://nmap.org ) at 2024-11-15 15:47 CET
+Starting Nmap 7.95 ( https://nmap.org ) at 2024-11-22 15:57 CET
 
 Nmap scan report for localhost (127.0.0.1)
 
-Host is up (0.000068s latency).
+Host is up (0.000025s latency).
 Other addresses for localhost (not scanned): ::1
-Not shown: 99 closed tcp ports (conn-refused)
-PORT     STATE SERVICE
-5900/tcp open  vnc
+Not shown: 9997 closed tcp ports (conn-refused)
+PORT     STATE SERVICE       VERSION
+5900/tcp open  vnc           Apple remote desktop vnc
+| vnc-info: 
+|   Protocol version: 3.889
+|   Security types: 
+|     Apple Remote Desktop (30)
+|     Unknown security type (33)
+|     Unknown security type (36)
+|_    Mac OS X security type (35)
+6463/tcp open  unknown
+| fingerprint-strings: 
+|   DNSStatusRequestTCP, DNSVersionBindReqTCP, Help, Kerberos, LDAPSearchReq, LPDString, RPCCheck, SMBProgNeg, SSLSessionReq, TLSSessionReq, TerminalServerCookie, X11Probe: 
+|     HTTP/1.1 400 Bad Request
+|     Connection: close
+|   FourOhFourRequest, GetRequest, HTTPOptions, RTSPRequest: 
+|     HTTP/1.1 404 Not Found
+|     Content-Length: 32
+|     Content-Type: application/json
+|     Date: Fri, 22 Nov 2024 14:57:36 GMT
+|     Connection: close
+|_    {"code":0,"message":"Not Found"}
+9277/tcp open  traingpsdata?
+| fingerprint-strings: 
+|   DNSStatusRequestTCP, Help, JavaRMI, LANDesk-RC, LDAPBindReq, LPDString, NCP, RTSPRequest, TerminalServer, X11Probe: 
+|     HTTP/1.1 400 Bad Request
+|     content-length: 0
+|     date: Fri, 22 Nov 2024 14:57:36 GMT
+|   FourOhFourRequest, GetRequest: 
+|     HTTP/1.0 404 Not Found
+|     vary: origin, access-control-request-method, access-control-request-headers
+|     content-length: 0
+|     date: Fri, 22 Nov 2024 14:57:36 GMT
+|   HTTPOptions: 
+|     HTTP/1.0 200 OK
+|     vary: origin, access-control-request-method, access-control-request-headers
+|     access-control-allow-methods: GET
+|     content-length: 0
+|_    date: Fri, 22 Nov 2024 14:57:36 GMT
+2 services unrecognized despite returning data. If you know the service/version, please submit the following fingerprints at https://nmap.org/cgi-bin/submit.cgi?new-service :
+==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+SF-Port6463-TCP:V=7.95%I=7%D=11/22%Time=67409BE0%P=arm-apple-darwin23.4.0%
+SF:r(GetRequest,A6,"HTTP/1\.1\x20404\x20Not\x20Found\r\nContent-Length:\x2
+SF:032\r\nContent-Type:\x20application/json\r\nDate:\x20Fri,\x2022\x20Nov\
+SF:x202024\x2014:57:36\x20GMT\r\nConnection:\x20close\r\n\r\n{\"code\":0,\
+SF:"message\":\"Not\x20Found\"}")%r(HTTPOptions,A6,"HTTP/1\.1\x20404\x20No
+SF:t\x20Found\r\nContent-Length:\x2032\r\nContent-Type:\x20application/jso
+SF:n\r\nDate:\x20Fri,\x2022\x20Nov\x202024\x2014:57:36\x20GMT\r\nConnectio
+SF:n:\x20close\r\n\r\n{\"code\":0,\"message\":\"Not\x20Found\"}")%r(RTSPRe
+SF:quest,A6,"HTTP/1\.1\x20404\x20Not\x20Found\r\nContent-Length:\x2032\r\n
+SF:Content-Type:\x20application/json\r\nDate:\x20Fri,\x2022\x20Nov\x202024
+SF:\x2014:57:36\x20GMT\r\nConnection:\x20close\r\n\r\n{\"code\":0,\"messag
+SF:e\":\"Not\x20Found\"}")%r(RPCCheck,2F,"HTTP/1\.1\x20400\x20Bad\x20Reque
+SF:st\r\nConnection:\x20close\r\n\r\n")%r(DNSVersionBindReqTCP,2F,"HTTP/1\
+SF:.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n")%r(DNSStat
+SF:usRequestTCP,2F,"HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20c
+SF:lose\r\n\r\n")%r(Help,2F,"HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnect
+SF:ion:\x20close\r\n\r\n")%r(SSLSessionReq,2F,"HTTP/1\.1\x20400\x20Bad\x20
+SF:Request\r\nConnection:\x20close\r\n\r\n")%r(TerminalServerCookie,2F,"HT
+SF:TP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n")%r(TL
+SF:SSessionReq,2F,"HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20cl
+SF:ose\r\n\r\n")%r(Kerberos,2F,"HTTP/1\.1\x20400\x20Bad\x20Request\r\nConn
+SF:ection:\x20close\r\n\r\n")%r(SMBProgNeg,2F,"HTTP/1\.1\x20400\x20Bad\x20
+SF:Request\r\nConnection:\x20close\r\n\r\n")%r(X11Probe,2F,"HTTP/1\.1\x204
+SF:00\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n")%r(FourOhFourRequ
+SF:est,A6,"HTTP/1\.1\x20404\x20Not\x20Found\r\nContent-Length:\x2032\r\nCo
+SF:ntent-Type:\x20application/json\r\nDate:\x20Fri,\x2022\x20Nov\x202024\x
+SF:2014:57:36\x20GMT\r\nConnection:\x20close\r\n\r\n{\"code\":0,\"message\
+SF:":\"Not\x20Found\"}")%r(LPDString,2F,"HTTP/1\.1\x20400\x20Bad\x20Reques
+SF:t\r\nConnection:\x20close\r\n\r\n")%r(LDAPSearchReq,2F,"HTTP/1\.1\x2040
+SF:0\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n");
+==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+SF-Port9277-TCP:V=7.95%I=7%D=11/22%Time=67409BE0%P=arm-apple-darwin23.4.0%
+SF:r(GetRequest,9F,"HTTP/1\.0\x20404\x20Not\x20Found\r\nvary:\x20origin,\x
+SF:20access-control-request-method,\x20access-control-request-headers\r\nc
+SF:ontent-length:\x200\r\ndate:\x20Fri,\x2022\x20Nov\x202024\x2014:57:36\x
+SF:20GMT\r\n\r\n")%r(HTTPOptions,BB,"HTTP/1\.0\x20200\x20OK\r\nvary:\x20or
+SF:igin,\x20access-control-request-method,\x20access-control-request-heade
+SF:rs\r\naccess-control-allow-methods:\x20GET\r\ncontent-length:\x200\r\nd
+SF:ate:\x20Fri,\x2022\x20Nov\x202024\x2014:57:36\x20GMT\r\n\r\n")%r(RTSPRe
+SF:quest,54,"HTTP/1\.1\x20400\x20Bad\x20Request\r\ncontent-length:\x200\r\
+SF:ndate:\x20Fri,\x2022\x20Nov\x202024\x2014:57:36\x20GMT\r\n\r\n")%r(DNSS
+SF:tatusRequestTCP,54,"HTTP/1\.1\x20400\x20Bad\x20Request\r\ncontent-lengt
+SF:h:\x200\r\ndate:\x20Fri,\x2022\x20Nov\x202024\x2014:57:36\x20GMT\r\n\r\
+SF:n")%r(Help,54,"HTTP/1\.1\x20400\x20Bad\x20Request\r\ncontent-length:\x2
+SF:00\r\ndate:\x20Fri,\x2022\x20Nov\x202024\x2014:57:36\x20GMT\r\n\r\n")%r
+SF:(X11Probe,54,"HTTP/1\.1\x20400\x20Bad\x20Request\r\ncontent-length:\x20
+SF:0\r\ndate:\x20Fri,\x2022\x20Nov\x202024\x2014:57:36\x20GMT\r\n\r\n")%r(
+SF:FourOhFourRequest,9F,"HTTP/1\.0\x20404\x20Not\x20Found\r\nvary:\x20orig
+SF:in,\x20access-control-request-method,\x20access-control-request-headers
+SF:\r\ncontent-length:\x200\r\ndate:\x20Fri,\x2022\x20Nov\x202024\x2014:57
+SF::36\x20GMT\r\n\r\n")%r(LPDString,54,"HTTP/1\.1\x20400\x20Bad\x20Request
+SF:\r\ncontent-length:\x200\r\ndate:\x20Fri,\x2022\x20Nov\x202024\x2014:57
+SF::36\x20GMT\r\n\r\n")%r(LDAPBindReq,54,"HTTP/1\.1\x20400\x20Bad\x20Reque
+SF:st\r\ncontent-length:\x200\r\ndate:\x20Fri,\x2022\x20Nov\x202024\x2014:
+SF:57:36\x20GMT\r\n\r\n")%r(LANDesk-RC,54,"HTTP/1\.1\x20400\x20Bad\x20Requ
+SF:est\r\ncontent-length:\x200\r\ndate:\x20Fri,\x2022\x20Nov\x202024\x2014
+SF::57:36\x20GMT\r\n\r\n")%r(TerminalServer,54,"HTTP/1\.1\x20400\x20Bad\x2
+SF:0Request\r\ncontent-length:\x200\r\ndate:\x20Fri,\x2022\x20Nov\x202024\
+SF:x2014:57:36\x20GMT\r\n\r\n")%r(NCP,54,"HTTP/1\.1\x20400\x20Bad\x20Reque
+SF:st\r\ncontent-length:\x200\r\ndate:\x20Fri,\x2022\x20Nov\x202024\x2014:
+SF:57:36\x20GMT\r\n\r\n")%r(JavaRMI,54,"HTTP/1\.1\x20400\x20Bad\x20Request
+SF:\r\ncontent-length:\x200\r\ndate:\x20Fri,\x2022\x20Nov\x202024\x2014:57
+SF::36\x20GMT\r\n\r\n");
+Service Info: OS: Mac OS X; CPE: cpe:/o:apple:mac_os_x
 
-Nmap done: 1 IP address (1 host up) scanned in 0.03 seconds
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 11.40 seconds
