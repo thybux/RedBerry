@@ -4,6 +4,7 @@ from PySide6.QtGui import QFont, QIcon
 from .pages.settings import Settings
 from .pages.pentest import Pentest
 from .pages.history import History
+from .pages.searchsploitPage import SearchsploitPage
 from functools import partial
 from pathlib import Path
 import os
@@ -45,7 +46,8 @@ class MainWindow(QMainWindow):
         self.pages = {
             'Pentest': {'widget': Pentest(), 'index': 0},
             'Settings': {'widget': Settings(), 'index': 1},
-            'History': {'widget': History(), 'index': 2}
+            'History': {'widget': History(), 'index': 2},
+            'Searchsploit': {'widget': SearchsploitPage(), 'index': 3}
         }
         for page_name, page_info in self.pages.items():
             self.stack.addWidget(page_info['widget'])
@@ -68,9 +70,10 @@ class MainWindow(QMainWindow):
         button_configs = [
             {'name': 'Pentest', 'text': 'Pentest', 'icon': 'Pentest.png'},
             {'name': 'Settings', 'text': 'Settings', 'icon': 'Settings.png'},
-            {'name': 'History', 'text': 'History', 'icon': 'History.png'}
+            {'name': 'History', 'text': 'History', 'icon': 'History.png'},
+            {'name': 'Searchsploit', 'text': 'Searchsploit', 'icon': ""}
         ]   
-        
+        count = 0
         for config in button_configs:
             btn = QToolButton()
             icon_path = self.assets_path / config['icon']
@@ -111,6 +114,9 @@ class MainWindow(QMainWindow):
                 }
             """)
             btn.clicked.connect(partial(self.navigate_to, config['name']))
+            if count > 2:
+                btn.setVisible(False)
+            count += 1
             menu_layout.addWidget(btn)
         
         self.stack.addWidget(menu_widget)
